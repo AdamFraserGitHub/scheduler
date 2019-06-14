@@ -1,0 +1,22 @@
+24
+2,teeth,manditory,Sun Jun 02 2019 09:00:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 09:15:00 GMT+0100 (British Summer Time),0:15,1559388435590
+3,cold shower,manditory,Sun Jun 02 2019 09:15:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 09:30:00 GMT+0100 (British Summer Time),0:15,1559389457583
+5,job applications,manditory,Sun Jun 02 2019 09:45:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 10:45:00 GMT+0100 (British Summer Time),1:0,1559389786705
+6,programming,good,Sun Jun 02 2019 10:55:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 12:55:00 GMT+0100 (British Summer Time),2:0,1559389898032
+7,dog walk,manditory,Sun Jun 02 2019 13:00:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 14:00:00 GMT+0100 (British Summer Time),1:0,1559389975673
+8,break,bad,Sun Jun 02 2019 14:05:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 15:05:00 GMT+0100 (British Summer Time),1:0,1559390054005
+9,workout plan,manditory,Sun Jun 02 2019 15:05:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 15:35:00 GMT+0100 (British Summer Time),0:30,1559390120820
+10,workout,good,Sun Jun 02 2019 15:35:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 16:35:00 GMT+0100 (British Summer Time),1:0,1559390138071
+11,cold shower,manditory,Sun Jun 02 2019 16:35:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 16:45:00 GMT+0100 (British Summer Time),0:10,1559390289660
+12,break,bad,Sun Jun 02 2019 16:55:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 17:25:00 GMT+0100 (British Summer Time),0:30,1559390359945
+13,dog walk,manditory,Sun Jun 02 2019 17:25:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 17:40:00 GMT+0100 (British Summer Time),0:15,1559390411156
+14,job applications,good,Sun Jun 02 2019 17:40:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 18:25:00 GMT+0100 (British Summer Time),0:45,1559390443589
+15,german plan,good,Sun Jun 02 2019 18:25:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 18:55:00 GMT+0100 (British Summer Time),0:30,1559390509808
+16,german practice,good,Sun Jun 02 2019 19:05:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 19:35:00 GMT+0100 (British Summer Time),0:30,1559390556439
+17,programming,good,Sun Jun 02 2019 19:35:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 21:35:00 GMT+0100 (British Summer Time),2:0,1559390603751
+18,cold shower,manditory,Sun Jun 02 2019 21:35:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 21:50:00 GMT+0100 (British Summer Time),0:15,1559390844569
+19,teeth,manditory,Sun Jun 02 2019 22:00:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 22:15:00 GMT+0100 (British Summer Time),0:15,1559390885555
+20,data Tracking,Manditory,Sun Jun 02 2019 22:15:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 22:30:00 GMT+0100 (British Summer Time),0:15,1559390937802
+21,go to bed,event,Sun Jun 02 2019 22:30:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 22:40:00 GMT+0100 (British Summer Time),0:0,1559391001110
+22,read,good,Sun Jun 02 2019 22:40:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 22:55:00 GMT+0100 (British Summer Time),0:15,1559391028221
+23,grimm,bad,Sun Jun 02 2019 22:55:00 GMT+0100 (British Summer Time),Sun Jun 02 2019 23:30:00 GMT+0100 (British Summer Time),0:35,1559391131258

@@ -1,0 +1,399 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <script src="/scripts/3rdParty/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <style>
+            .dayTaskDiv {
+                width:90%;
+                margin-left: 50%;
+                transform: translate(-50%,0%);
+                margin-top: 20px;
+                margin-bottom: 20px;
+                background-color: rgb(235,235,235);
+                padding: 10px;
+                border-radius: 5px;
+            }
+            .schedulePageDiv {
+                border-top-left-radius: 25px;
+                border-top-right-radius: 25px;
+                background-color: white;
+                /* padding: 10px; */
+                bottom: 0px;
+                top: 110px;
+                width: 100%;
+                overflow: scroll;
+                overflow-x: hidden;
+                position: absolute;
+            }
+
+            .fitContent {
+                width: fit-content !important;
+            }
+
+            .topControl {
+                background-color: rgb(235,235,235);
+                padding: 10px;
+            }
+
+            #daySummaryCanvas {
+                width: 100%;
+                background-color: black;
+                height: 5px;
+            }
+
+            body, html {
+                margin: 0px;
+                padding: 0px;
+                background-color: rgb(235,235,235) !important;
+                overflow: hidden;
+                overflow-x: hidden;
+                overflow-y: hidden;
+            }
+        </style>
+    </head>
+
+    <body>
+        <datalist id="taskNames">
+            <option value="teeth"></option>
+            <option value="read"></option>
+            <option value="workout"></option>
+            <option value="dog walk"></option>
+            <option value="programming"></option>
+            <option value="job application"></option>
+            <option value="boyfriend"></option>
+            <option value="friends"></option>
+            <option value="break"></option>
+            <option value="shower"></option>
+            <option value="german"></option>
+            <option value="go to sleep"></option>
+            <option value="data tracking"></option>
+            <option value="learning"></option>
+            <option value="work"></option>
+            <option value="transport"></option>
+            <option value="pokemon"></option>
+            <option value="video games"></option>
+            <option value="minecraft"></option>
+            <option value="civ v"></option>
+            <option value="hearts of iron 4"></option>
+        </datalist>
+        <!-- TODO replace first div with script call! -->
+        <div class="topControl">
+            <div class="row">
+                <div class="col">
+                    date
+                    <input type="date" id="scheduleDate" class="fitContent form-control" placeholder="date">
+                </div>
+                <div class="col">
+                    <br>
+                    <div class="fitContent btn-group" role="group">
+                        <button type="button" class="btn btn-outline-danger" onclick="clearAllTasks()">❌</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="addEmptyTask();">➕</button>
+                        <button type="button" class="btn btn-outline-success" onclick="submitSchedule()">💾</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="schedulePageDiv" id="schedulePageDiv">
+            <canvas id="daySummaryCanvas"></canvas>
+            <!-- <div class="dayTaskDiv" id="dayTaskDiv0">
+                <div class="row">
+                    <div class="col">
+                        <input type="text" list="taskNames" placeholder="task name" id="0TaskName" class="form-control">
+                    </div>
+                    <div class="col">
+                        <select class="form-control" id="0Type" onchange="typeChange(0)">
+                            <option value="manditory">manditory</option>
+                            <option value="good">good</option>
+                            <option value="bad">bad</option>
+                        </select>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col">
+                        start time
+                        <input type="time" class="form-control" id="0StartTime" onchange="startTimeChange(0); updateSummary();"> 
+                    </div>
+                    <div class="col">
+                        end time
+                        <input type="time" class="form-control" id="0EndTime" onchange="endTimeChange(0); updateSummary();">
+                    </div>
+                    <div class="col">
+                        duration
+                        <input type="time" class="form-control" id="0Duration" onchange="durationChange(0); updateSummary();">
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </body>
+
+    <script>
+        //TODO CHANGE TO ARRAYs
+        var startTime = [];
+        var duration = [];
+        var endTime = [];
+        var tasks = 0;
+
+        function typeChange(baseOfId) {
+            var typeDropDown = document.getElementById(String(baseOfId) + 'Type');
+            var taskDiv = document.getElementById('dayTaskDiv' + String(baseOfId));
+            console.log(typeDropDown)
+            if(typeDropDown.value == "good") {
+                taskDiv.style.backgroundColor = 'rgb(0,255,100)'
+            } else if(typeDropDown.value == "bad") {
+                taskDiv.style.backgroundColor = 'rgb(255,0,50)'
+            } else {
+                taskDiv.style.backgroundColor = 'rgb(235,235,235)';
+            }
+        }
+
+        function submitSchedule() {
+            if(confirm("are you sure you want to save?\nthis will overwrite any schedule that is already asigned to this date")) {
+                //get data from from page
+                var scheduleDate = document.getElementById('scheduleDate').value;
+
+                //TODO change this
+                $.ajax({type:"POST", url:"/clearFile", data: { scheduleDate: new Date(scheduleDate) }, success: function(response) {console.log("clear file: " + response)}});
+                for(var i = 0; i < tasks; i++) {
+                    var taskName = document.getElementById(String(i) + 'TaskName').value;
+                    var type = document.getElementById(String(i) + 'Type').value;
+                    var startTime = document.getElementById(String(i) + 'StartTime').value;
+                    var endTime = document.getElementById(String(i) + 'EndTime').value;
+                    var duration = document.getElementById(String(i) + 'Duration').value;
+
+                    duration = {
+                        hours: duration.split(':')[0],
+                        mins: duration.split(':')[1]
+                    }
+
+                    var startTime = new Date(scheduleDate + "T" + startTime);
+                    var endTime = new Date(scheduleDate + "T" + endTime);
+                    var timestamp = new Date()
+                    timestamp = timestamp.getTime();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/addTask",
+                        data: {
+                            taskName: taskName,
+                            type: type,
+                            startTime: startTime,
+                            endTime: endTime,
+                            duration: duration,
+                            timestamp: timestamp,
+                            scheduleDate: scheduleDate
+                        },
+                        
+                        success: function(response) {
+                            if(response != "OK") {
+                                console.log("failed to post task to server!, code: " + response)
+                                alert("failed to post task to server!")
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        function clearAllTasks() {
+            if(confirm("this will permenantly remove all tasks on this schedule\nare you sure?")) {
+                // var nodes = document.getElementsByClassName('dayTaskDiv');
+                // console.log(nodes);
+                
+                for(var i = 0; i < tasks; i++) {
+                    //gets the parent node of the current node
+                    //and then removes this node as a child
+                    
+                    var elem = document.getElementById('dayTaskDiv' + String(i));
+                    elem.parentNode.removeChild(elem);
+                }
+
+                tasks = 0;
+            }
+        }
+
+        function addEmptyTask() {
+            startTime.push(false);
+            endTime.push(false);
+            duration.push(false);
+
+            var startTimeString = "";
+            if(tasks > 0) {
+                startTimeString = document.getElementById((String(tasks - 1) + "EndTime")).value;
+                startTime[tasks] = {
+                    hours: Number(startTimeString.split(':')[0]),
+                    mins: Number(startTimeString.split(':')[1]),
+                };
+                console.log(startTimeString)
+                console.log(String(tasks - 1) + "EndTime")
+            }
+
+            var newTaskDiv = document.createElement('div');
+            newTaskDiv.classList.add('dayTaskDiv');
+            newTaskDiv.id = ('dayTaskDiv' + String(tasks));
+            newTaskDiv.innerHTML = '<div class="row">\
+                    <div class="col">\
+                        <input type="text" list="taskNames" placeholder="task name" class="form-control" id="' + String(tasks) + 'TaskName">\
+                    </div>\
+                    <div class="col">\
+                        <select class="form-control" id="' + String(tasks) + 'Type" onchange="typeChange(' + String(tasks) + ')">\
+                            <option value="manditory">manditory</option>\
+                            <option value="good">good</option>\
+                            <option value="bad">bad</option>\
+                        </select>\
+                    </div>\
+                    <div class="col">\
+                </div>\
+                <br>\
+                <div class="row">\
+                    <div class="col">\
+                        start time\
+                        <input type="time" value="' + startTimeString + '" class="form-control" id="' + String(tasks) + 'StartTime" onchange="updateSummary(); startTimeChange(' + String(tasks) + ');"> \
+                    </div>\
+                    <div class="col">\
+                        end time\
+                        <input type="time" class="form-control" id="' + String(tasks) + 'EndTime" onchange="endTimeChange(' + String(tasks) + ')">\
+                    </div>\
+                    <div class="col">\
+                        duration\
+                        <input type="time" class="form-control" id="' + String(tasks) + 'Duration" onchange="durationChange(' + String(tasks) + ')">\
+                    </div>';
+
+            document.getElementById('schedulePageDiv').appendChild(newTaskDiv);
+            tasks++;
+        }
+
+        function startTimeChange(baseOfId) {
+            var startTimeTemp = document.getElementById(String(baseOfId) + "StartTime").value;
+
+            //check that the change in start time was not the start time being removed
+            if(startTimeTemp) {
+                startTime[baseOfId] = {
+                    hours: Number(startTimeTemp.split(":")[0]),
+                    mins: Number(startTimeTemp.split(":")[1])
+                }
+                console.log(startTime[baseOfId]);
+                if(duration[baseOfId]) {
+                    var endTimeStr = "";
+                    endTime[baseOfId] = {
+                        hours: startTime[baseOfId].hours + duration[baseOfId].hours,
+                        mins: startTime[baseOfId].mins + duration[baseOfId].mins
+                    }
+                    if(endTime[baseOfId].hours < 10) {
+                        endTimeStr += "0"
+                    }
+                    endTimeStr += String(endTime[baseOfId].hours) + ":"
+                    if(endTime[baseOfId].mins < 10) {
+                        endTimeStr += "0";
+                    }
+                    endTimeStr += String(endTime[baseOfId].mins);
+
+                    document.getElementById(String(baseOfId) + "EndTime").value = endTimeStr;
+                }
+            } else {
+                startTime[baseOfId] = false;
+            }
+        }
+
+        function endTimeChange(baseOfId) {
+            var endTimeTemp = document.getElementById(String(baseOfId) + "EndTime").value;
+            
+            //check that the change in start time was not the start time being removed
+            if(endTimeTemp) {
+                endTime[baseOfId] = {
+                    hours: Number(endTimeTemp.split(":")[0]),
+                    mins: Number(endTimeTemp.split(":")[1])
+                }
+                if(startTime[baseOfId]) {
+                    var durationStr = "";
+                    duration[baseOfId] = {
+                        hours: endTime[baseOfId].hours - startTime[baseOfId].hours,
+                        mins: endTime[baseOfId].mins - startTime[baseOfId].mins
+                    }
+
+                    if(duration[baseOfId].mins < 0) {
+                        duration[baseOfId].hours -= 1;
+                        duration[baseOfId].mins += 60;
+                    }
+
+                    if(duration[baseOfId].hours < 10) {
+                        durationStr += "0"
+                    }
+                    durationStr += String(duration[baseOfId].hours) + ":"
+                    if(duration[baseOfId].mins < 10) {
+                        durationStr += "0";
+                    }
+                    durationStr += String(duration[baseOfId].mins);
+
+                    document.getElementById(String(baseOfId) + "Duration").value = durationStr;
+                }
+            } else {
+                endTime[baseOfId] = false;
+            }
+        }
+
+        function durationChange(baseOfId) {
+            var durationTemp = document.getElementById(String(baseOfId) + "Duration").value;
+
+            if(durationTemp) {
+                duration[baseOfId] = {
+                    hours: Number(durationTemp.split(":")[0]),
+                    mins: Number(durationTemp.split(":")[1])
+                }
+                
+                if(startTime[baseOfId]) {
+                    var endTimeStr = "";
+                    endTime[baseOfId] = {
+                        hours: startTime[baseOfId].hours + duration[baseOfId].hours,
+                        mins: startTime[baseOfId].mins + duration[baseOfId].mins
+                    }
+                    //handles adding of minutes that shifts the end time to a different hour from the start time
+                    if(endTime[baseOfId].mins >= 60) {
+                        endTime[baseOfId].hours += Math.floor(endTime[baseOfId].mins / 60) //adds any excess hours (could use +1 but this catches everything)
+                        endTime[baseOfId].mins -= Math.floor(endTime[baseOfId].mins / 60) * 60 //subtracts until the minutes <= 59
+                    }
+
+
+                    if(endTime[baseOfId].hours < 10) {
+                        endTimeStr += "0"
+                    }
+                    endTimeStr += String(endTime[baseOfId].hours) + ":"
+                    if(endTime[baseOfId].mins < 10) {
+                        endTimeStr += "0";
+                    }
+                    endTimeStr += String(endTime[baseOfId].mins);
+
+                    document.getElementById(String(baseOfId) + "EndTime").value = endTimeStr;
+                } else if(endTime[baseOfId]) {
+                    var startTimeStr = "";
+                    startTime[baseOfId] = {
+                        hours: endTime[baseOfId].hours - duration[baseOfId].hours,
+                        mins: endTime[baseOfId].mins - duration[baseOfId].mins
+                    }
+                    if(startTime[baseOfId].hours < 10) {
+                        startTimeStr += "0"
+                    }
+                    startTimeStr += String(startTime[baseOfId].hours) + ":"
+                    if(startTime[baseOfId].mins < 10) {
+                        startTimeStr += "0";
+                    }
+                    startTimeStr += String(startTime[baseOfId].mins);
+
+                    document.getElementById(String(baseOfId) + "StartTime").value = startTimeStr;
+                }
+            } else {
+                duration[baseOfId] = false;
+            }
+        }
+
+        function updateSummary() {
+            console.log("update summary!")
+        }
+    </script>
+</html>
